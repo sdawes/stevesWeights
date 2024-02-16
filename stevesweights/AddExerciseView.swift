@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AddExerciseView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     @State private var exerciseName: String = ""
     
     var body: some View {
@@ -28,17 +28,17 @@ struct AddExerciseView: View {
     }
     
     private func addExercise() {
-        let newExercise = Exercise(context: viewContext)
-        newExercise.name = exerciseName
-        
-        do {
-            try viewContext.save()
-            dismiss() // Dismiss the view programmatically after saving
-        } catch {
-            // Handle the error appropriately
-            print("Error saving exercise: \(error.localizedDescription)")
+            let newExercise = Exercise(context: viewContext)
+            newExercise.name = exerciseName
+            
+            do {
+                try viewContext.save()
+                dismiss()
+            } catch {
+                // Handle the error appropriately
+                print("Error saving exercise: \(error.localizedDescription)")
+            }
         }
-    }
 }
 
 

@@ -71,13 +71,14 @@ struct WorkoutsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 Text("This is the Workouts view")
                     .padding()
             }
+            .navigationTitle("Workouts")
         }
-        .navigationTitle("Workouts")
+        
     }
 }
 //
@@ -96,9 +97,10 @@ struct ExerciseListView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Exercise.name, ascending: true)],
         animation: .default)
     private var exercises: FetchedResults<Exercise>
-
+    @State private var isAddingExercise = false
+    
     var body: some View {
-        NavigationView {
+        NavigationStack { // Updated to use NavigationStack
             List {
                 ForEach(exercises, id: \.self) { exercise in
                     NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
@@ -107,19 +109,19 @@ struct ExerciseListView: View {
                 }
             }
             .navigationTitle("Exercises")
-            .onAppear {
-                print("ExerciseListView appeared") // Add this line
-            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: AddExerciseView()) {
-                        Label("Add Exercise", systemImage: "plus")
+                    Button("Add Exercise") {
+                        isAddingExercise = true
                     }
                 }
             }
-        }
+            .navigationDestination(isPresented: $isAddingExercise) {
+                AddExerciseView()
+            }        }
     }
 }
+
 
 
 
@@ -138,14 +140,15 @@ import SwiftUI
 
 struct AddExerciseView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) var presentationMode
     @State private var exerciseName: String = ""
-
+    
     var body: some View {
         VStack(spacing: 20) {
             TextField("Exercise name", text: $exerciseName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-
+            
             Button("Save Exercise") {
                 addExercise()
             }
@@ -153,20 +156,21 @@ struct AddExerciseView: View {
         }
         .navigationTitle("Add Exercise")
     }
-
+    
     private func addExercise() {
         let newExercise = Exercise(context: viewContext)
         newExercise.name = exerciseName
-
+        
         do {
             try viewContext.save()
-            // Add logic to dismiss the view if needed
+            dismiss() // Dismiss the view programmatically after saving
         } catch {
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            // Handle the error appropriately
+            print("Error saving exercise: \(error.localizedDescription)")
         }
     }
 }
+
 
 //
 //  ExerciseDetailView.swift
@@ -181,17 +185,15 @@ import SwiftUI
 struct ExerciseDetailView: View {
     @ObservedObject var exercise: Exercise
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
     @State private var exerciseName: String = ""
-
+    
     var body: some View {
         VStack {
             TextField("Exercise Name", text: $exerciseName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-
-            // Example static text, replace with dynamic content as needed
             Text("More details about the exercise...")
-
             Spacer()
         }
         .onAppear {
@@ -201,10 +203,20 @@ struct ExerciseDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Save") {
-                    exercise.name = exerciseName
-                    try? viewContext.save()
+                    saveExercise()
                 }
             }
+        }
+    }
+    
+    private func saveExercise() {
+        exercise.name = exerciseName
+        do {
+            try viewContext.save()
+            dismiss() // Dismiss the view programmatically after saving
+        } catch {
+            // Handle the save error appropriately
+            print("Error saving exercise: \(error.localizedDescription)")
         }
     }
 }
