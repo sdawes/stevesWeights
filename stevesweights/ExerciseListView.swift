@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import CoreData
 
-struct ExercisesView: View {
+struct ExerciseListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Exercise.name, ascending: true)],
