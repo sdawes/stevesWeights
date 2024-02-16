@@ -10,14 +10,15 @@ import SwiftUI
 
 struct AddExerciseView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) var presentationMode
     @State private var exerciseName: String = ""
-
+    
     var body: some View {
         VStack(spacing: 20) {
             TextField("Exercise name", text: $exerciseName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-
+            
             Button("Save Exercise") {
                 addExercise()
             }
@@ -25,18 +26,19 @@ struct AddExerciseView: View {
         }
         .navigationTitle("Add Exercise")
     }
-
+    
     private func addExercise() {
         let newExercise = Exercise(context: viewContext)
         newExercise.name = exerciseName
-
+        
         do {
             try viewContext.save()
-            // Add logic to dismiss the view if needed
+            dismiss() // Dismiss the view programmatically after saving
         } catch {
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            // Handle the error appropriately
+            print("Error saving exercise: \(error.localizedDescription)")
         }
     }
 }
+
 

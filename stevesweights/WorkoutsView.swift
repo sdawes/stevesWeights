@@ -9,16 +9,15 @@ import SwiftUI
 
 struct WorkoutsView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
-                NavigationLink(destination: ExercisesView()) {
-                    Text("View Exercises")
-                }
-                .padding()
+                Text("This is the Workouts view")
+                    .padding()
             }
             .navigationTitle("Workouts")
         }
+        
     }
 }

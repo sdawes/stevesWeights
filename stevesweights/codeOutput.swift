@@ -1,146 +1,4 @@
 //
-//  ContentView.swift
-//  stevesweights
-//
-//  Created by Stephen Dawes on 16/02/2024.
-//
-
-import SwiftUI
-import CoreData
-
-struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-}
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
-#Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-}
-//
-//  Persistence.swift
-//  stevesweights
-//
-//  Created by Stephen Dawes on 16/02/2024.
-//
-
-import CoreData
-
-struct PersistenceController {
-    static let shared = PersistenceController()
-
-    static var preview: PersistenceController = {
-        let result = PersistenceController(inMemory: true)
-        let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
-        do {
-            try viewContext.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-        }
-        return result
-    }()
-
-    let container: NSPersistentContainer
-
-    init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "stevesweights")
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        }
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        container.viewContext.automaticallyMergesChangesFromParent = true
-    }
-}
-//
 //  stevesweightsApp.swift
 //  stevesweights
 //
@@ -155,8 +13,227 @@ struct stevesweightsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
+//
+//  MainView.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 16/02/2024.
+//
+
+import Foundation
+import SwiftUI
+
+struct MainView: View {
+    var body: some View {
+        TabView {
+            WorkoutsView()
+                .tabItem {
+                    Label("Workouts", systemImage: "list.dash")
+                }
+            
+            ExerciseListView() // Updated to use ExerciseListView
+                .tabItem {
+                    Label("Exercises", systemImage: "flame")
+                }
+            // Placeholder tabs
+            Text("Placeholder 1")
+                .tabItem {
+                    Label("Placeholder 1", systemImage: "square.fill")
+                }
+            
+            Text("Placeholder 2")
+                .tabItem {
+                    Label("Placeholder 2", systemImage: "circle.fill")
+                }
+            
+            Text("Placeholder 3")
+                .tabItem {
+                    Label("Placeholder 3", systemImage: "triangle.fill")
+                }
+        }
+    }
+}
+//
+//  ContentView.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 16/02/2024.
+//
+
+import SwiftUI
+
+struct WorkoutsView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("This is the Workouts view")
+                    .padding()
+            }
+        }
+        .navigationTitle("Workouts")
+    }
+}
+//
+//  ExerciseListView.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 16/02/2024.
+//
+
+import SwiftUI
+import CoreData
+
+struct ExerciseListView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Exercise.name, ascending: true)],
+        animation: .default)
+    private var exercises: FetchedResults<Exercise>
+
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(exercises, id: \.self) { exercise in
+                    NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
+                        Text(exercise.name ?? "Unnamed Exercise")
+                    }
+                }
+            }
+            .navigationTitle("Exercises")
+            .onAppear {
+                print("ExerciseListView appeared") // Add this line
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: AddExerciseView()) {
+                        Label("Add Exercise", systemImage: "plus")
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+//
+//  AddExerciseView.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 16/02/2024.
+//
+
+import Foundation
+import SwiftUI
+
+struct AddExerciseView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @State private var exerciseName: String = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+            TextField("Exercise name", text: $exerciseName)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            Button("Save Exercise") {
+                addExercise()
+            }
+            .disabled(exerciseName.isEmpty)
+        }
+        .navigationTitle("Add Exercise")
+    }
+
+    private func addExercise() {
+        let newExercise = Exercise(context: viewContext)
+        newExercise.name = exerciseName
+
+        do {
+            try viewContext.save()
+            // Add logic to dismiss the view if needed
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
+    }
+}
+
+//
+//  ExerciseDetailView.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 16/02/2024.
+//
+
+import Foundation
+import SwiftUI
+
+struct ExerciseDetailView: View {
+    @ObservedObject var exercise: Exercise
+    @Environment(\.managedObjectContext) private var viewContext
+    @State private var exerciseName: String = ""
+
+    var body: some View {
+        VStack {
+            TextField("Exercise Name", text: $exerciseName)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            // Example static text, replace with dynamic content as needed
+            Text("More details about the exercise...")
+
+            Spacer()
+        }
+        .onAppear {
+            exerciseName = exercise.name ?? ""
+        }
+        .navigationTitle(exercise.name ?? "Exercise Details")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Save") {
+                    exercise.name = exerciseName
+                    try? viewContext.save()
+                }
+            }
+        }
+    }
+}
+
+//
+//  Persistence.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 16/02/2024.
+//
+
+import CoreData
+
+struct PersistenceController {
+    static let shared = PersistenceController()
+
+    let container: NSPersistentContainer
+
+    init(inMemory: Bool = false) {
+        container = NSPersistentContainer(name: "stevesweights")
+        if inMemory {
+            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        }
+        container.loadPersistentStores { _, error in
+            if let error = error as NSError? {
+                // Real error handling should be here, possibly involving user feedback and error resolution steps.
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        }
+    }
+}
+

@@ -14,7 +14,9 @@
 		1FD576672B7F7F49004C0EA4 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576662B7F7F49004C0EA4 /* Persistence.swift */; };
 		1FD5766A2B7F7F49004C0EA4 /* stevesweights.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576682B7F7F49004C0EA4 /* stevesweights.xcdatamodeld */; };
 		1FD576712B7F80EE004C0EA4 /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576702B7F80ED004C0EA4 /* AddExerciseView.swift */; };
-		1FD576732B7F83EE004C0EA4 /* ExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576722B7F83EE004C0EA4 /* ExercisesView.swift */; };
+		1FD576732B7F83EE004C0EA4 /* ExerciseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576722B7F83EE004C0EA4 /* ExerciseListView.swift */; };
+		1FD576752B7F8D83004C0EA4 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576742B7F8D83004C0EA4 /* MainView.swift */; };
+		1FD576772B7F8E79004C0EA4 /* ExerciseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576762B7F8E79004C0EA4 /* ExerciseDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,7 +28,9 @@
 		1FD576662B7F7F49004C0EA4 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		1FD576692B7F7F49004C0EA4 /* stevesweights.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = stevesweights.xcdatamodel; sourceTree = "<group>"; };
 		1FD576702B7F80ED004C0EA4 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
-		1FD576722B7F83EE004C0EA4 /* ExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesView.swift; sourceTree = "<group>"; };
+		1FD576722B7F83EE004C0EA4 /* ExerciseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseListView.swift; sourceTree = "<group>"; };
+		1FD576742B7F8D83004C0EA4 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		1FD576762B7F8E79004C0EA4 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +64,11 @@
 			isa = PBXGroup;
 			children = (
 				1FD5765D2B7F7F47004C0EA4 /* stevesweightsApp.swift */,
+				1FD576742B7F8D83004C0EA4 /* MainView.swift */,
 				1FD5765F2B7F7F47004C0EA4 /* WorkoutsView.swift */,
-				1FD576722B7F83EE004C0EA4 /* ExercisesView.swift */,
+				1FD576722B7F83EE004C0EA4 /* ExerciseListView.swift */,
 				1FD576702B7F80ED004C0EA4 /* AddExerciseView.swift */,
+				1FD576762B7F8E79004C0EA4 /* ExerciseDetailView.swift */,
 				1FD576612B7F7F49004C0EA4 /* Assets.xcassets */,
 				1FD576662B7F7F49004C0EA4 /* Persistence.swift */,
 				1FD576682B7F7F49004C0EA4 /* stevesweights.xcdatamodeld */,
@@ -149,7 +155,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FD576732B7F83EE004C0EA4 /* ExercisesView.swift in Sources */,
+				1FD576732B7F83EE004C0EA4 /* ExerciseListView.swift in Sources */,
+				1FD576772B7F8E79004C0EA4 /* ExerciseDetailView.swift in Sources */,
+				1FD576752B7F8D83004C0EA4 /* MainView.swift in Sources */,
 				1FD576672B7F7F49004C0EA4 /* Persistence.swift in Sources */,
 				1FD576602B7F7F47004C0EA4 /* WorkoutsView.swift in Sources */,
 				1FD5765E2B7F7F47004C0EA4 /* stevesweightsApp.swift in Sources */,
