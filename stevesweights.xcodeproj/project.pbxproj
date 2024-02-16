@@ -8,21 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		1FD5765E2B7F7F47004C0EA4 /* stevesweightsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD5765D2B7F7F47004C0EA4 /* stevesweightsApp.swift */; };
-		1FD576602B7F7F47004C0EA4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD5765F2B7F7F47004C0EA4 /* ContentView.swift */; };
+		1FD576602B7F7F47004C0EA4 /* WorkoutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD5765F2B7F7F47004C0EA4 /* WorkoutsView.swift */; };
 		1FD576622B7F7F49004C0EA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FD576612B7F7F49004C0EA4 /* Assets.xcassets */; };
 		1FD576652B7F7F49004C0EA4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FD576642B7F7F49004C0EA4 /* Preview Assets.xcassets */; };
 		1FD576672B7F7F49004C0EA4 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576662B7F7F49004C0EA4 /* Persistence.swift */; };
 		1FD5766A2B7F7F49004C0EA4 /* stevesweights.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576682B7F7F49004C0EA4 /* stevesweights.xcdatamodeld */; };
+		1FD576712B7F80EE004C0EA4 /* AddExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576702B7F80ED004C0EA4 /* AddExerciseView.swift */; };
+		1FD576732B7F83EE004C0EA4 /* ExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD576722B7F83EE004C0EA4 /* ExercisesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1FD5765A2B7F7F47004C0EA4 /* stevesweights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = stevesweights.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FD5765D2B7F7F47004C0EA4 /* stevesweightsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = stevesweightsApp.swift; sourceTree = "<group>"; };
-		1FD5765F2B7F7F47004C0EA4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1FD5765F2B7F7F47004C0EA4 /* WorkoutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsView.swift; sourceTree = "<group>"; };
 		1FD576612B7F7F49004C0EA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1FD576642B7F7F49004C0EA4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1FD576662B7F7F49004C0EA4 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		1FD576692B7F7F49004C0EA4 /* stevesweights.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = stevesweights.xcdatamodel; sourceTree = "<group>"; };
+		1FD576702B7F80ED004C0EA4 /* AddExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExerciseView.swift; sourceTree = "<group>"; };
+		1FD576722B7F83EE004C0EA4 /* ExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +60,9 @@
 			isa = PBXGroup;
 			children = (
 				1FD5765D2B7F7F47004C0EA4 /* stevesweightsApp.swift */,
-				1FD5765F2B7F7F47004C0EA4 /* ContentView.swift */,
+				1FD5765F2B7F7F47004C0EA4 /* WorkoutsView.swift */,
+				1FD576722B7F83EE004C0EA4 /* ExercisesView.swift */,
+				1FD576702B7F80ED004C0EA4 /* AddExerciseView.swift */,
 				1FD576612B7F7F49004C0EA4 /* Assets.xcassets */,
 				1FD576662B7F7F49004C0EA4 /* Persistence.swift */,
 				1FD576682B7F7F49004C0EA4 /* stevesweights.xcdatamodeld */,
@@ -143,9 +149,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FD576732B7F83EE004C0EA4 /* ExercisesView.swift in Sources */,
 				1FD576672B7F7F49004C0EA4 /* Persistence.swift in Sources */,
-				1FD576602B7F7F47004C0EA4 /* ContentView.swift in Sources */,
+				1FD576602B7F7F47004C0EA4 /* WorkoutsView.swift in Sources */,
 				1FD5765E2B7F7F47004C0EA4 /* stevesweightsApp.swift in Sources */,
+				1FD576712B7F80EE004C0EA4 /* AddExerciseView.swift in Sources */,
 				1FD5766A2B7F7F49004C0EA4 /* stevesweights.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
