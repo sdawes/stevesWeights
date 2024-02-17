@@ -51,6 +51,7 @@ struct WorkoutsView: View {
     }
 }
 
+
 private let itemFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateStyle = .long

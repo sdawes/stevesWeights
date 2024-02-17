@@ -31,33 +31,24 @@ import SwiftUI
 struct MainView: View {
     var body: some View {
         TabView {
-            WorkoutsView()
-                .tabItem {
-                    Label("Workouts", systemImage: "list.dash")
-                }
-            
-            ExerciseListView() // Updated to use ExerciseListView
-                .tabItem {
-                    Label("Exercises", systemImage: "flame")
-                }
-            // Placeholder tabs
-            Text("Placeholder 1")
-                .tabItem {
-                    Label("Placeholder 1", systemImage: "square.fill")
-                }
-            
-            Text("Placeholder 2")
-                .tabItem {
-                    Label("Placeholder 2", systemImage: "circle.fill")
-                }
-            
-            Text("Placeholder 3")
-                .tabItem {
-                    Label("Placeholder 3", systemImage: "triangle.fill")
-                }
+            Group {
+                WorkoutsView()
+                    .tabItem {
+                        Label("Workouts", systemImage: "list.dash")
+                    }
+                
+                ExerciseListView()
+                    .tabItem {
+                        Label("Exercises", systemImage: "flame")
+                    }
+            }
         }
     }
 }
+
+
+
+
 //
 //  ContentView.swift
 //  stevesweights
@@ -68,19 +59,57 @@ struct MainView: View {
 import SwiftUI
 
 struct WorkoutsView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.managedObjectContext) var viewContext
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Workout.date, ascending: false)],
+        animation: .default)
+    private var workouts: FetchedResults<Workout>
+    @State private var showingAddWorkoutView = false
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("This is the Workouts view")
-                    .padding()
+            List {
+                ForEach(workouts, id: \.self) { workout in
+                    VStack(alignment: .leading) {
+                        Text("Workout: \(workout.date!, formatter: itemFormatter)")
+                            .font(.headline)
+                    }
+                }
             }
             .navigationTitle("Workouts")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: addWorkout) {
+                        Label("Add Workout", systemImage: "plus")
+                    }
+                }
+            }
+            
         }
+    }
+    
+    private func addWorkout() {
+        let newWorkout = Workout(context: viewContext)
+        newWorkout.id = UUID()
+        newWorkout.date = Date()
         
+        do {
+            try viewContext.save()
+        } catch {
+            // Handle the save error here
+            print("Error saving workout: \(error)")
+        }
     }
 }
+
+
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.timeStyle = .short
+    return formatter
+}()
+
 //
 //  ExerciseListView.swift
 //  stevesweights
@@ -100,7 +129,7 @@ struct ExerciseListView: View {
     @State private var isAddingExercise = false
     
     var body: some View {
-        NavigationStack { // Updated to use NavigationStack
+        NavigationStack {
             List {
                 ForEach(exercises, id: \.self) { exercise in
                     NavigationLink(destination: ExerciseDetailView(exercise: exercise)) {
@@ -118,7 +147,8 @@ struct ExerciseListView: View {
             }
             .navigationDestination(isPresented: $isAddingExercise) {
                 AddExerciseView()
-            }        }
+            }
+        }
     }
 }
 
@@ -140,7 +170,7 @@ import SwiftUI
 
 struct AddExerciseView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     @State private var exerciseName: String = ""
     
     var body: some View {
@@ -158,17 +188,17 @@ struct AddExerciseView: View {
     }
     
     private func addExercise() {
-        let newExercise = Exercise(context: viewContext)
-        newExercise.name = exerciseName
-        
-        do {
-            try viewContext.save()
-            dismiss() // Dismiss the view programmatically after saving
-        } catch {
-            // Handle the error appropriately
-            print("Error saving exercise: \(error.localizedDescription)")
+            let newExercise = Exercise(context: viewContext)
+            newExercise.name = exerciseName
+            
+            do {
+                try viewContext.save()
+                dismiss()
+            } catch {
+                // Handle the error appropriately
+                print("Error saving exercise: \(error.localizedDescription)")
+            }
         }
-    }
 }
 
 
