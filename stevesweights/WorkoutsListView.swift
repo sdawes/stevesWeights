@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WorkoutsView: View {
+struct WorkoutsListView: View {
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Workout.date, ascending: false)],
@@ -24,6 +24,7 @@ struct WorkoutsView: View {
                             .font(.headline)
                     }
                 }
+                .onDelete(perform: deleteWorkouts)
             }
             .navigationTitle("Workouts")
             .toolbar {
@@ -47,6 +48,19 @@ struct WorkoutsView: View {
         } catch {
             // Handle the save error here
             print("Error saving workout: \(error)")
+        }
+    }
+    
+    private func deleteWorkouts(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { workouts[$0] }.forEach(viewContext.delete)
+            
+            do {
+                try viewContext.save()
+            } catch {
+                // Handle the Core Data error
+                print("Error deleting workout: \(error)")
+            }
         }
     }
 }
