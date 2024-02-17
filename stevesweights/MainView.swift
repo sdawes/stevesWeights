@@ -12,7 +12,7 @@ struct MainView: View {
     var body: some View {
         TabView {
             Group {
-                WorkoutsView()
+                WorkoutsListView()
                     .tabItem {
                         Label("Workouts", systemImage: "list.dash")
                     }

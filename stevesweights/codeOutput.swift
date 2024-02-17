@@ -32,7 +32,7 @@ struct MainView: View {
     var body: some View {
         TabView {
             Group {
-                WorkoutsView()
+                WorkoutsListView()
                     .tabItem {
                         Label("Workouts", systemImage: "list.dash")
                     }
@@ -58,7 +58,7 @@ struct MainView: View {
 
 import SwiftUI
 
-struct WorkoutsView: View {
+struct WorkoutsListView: View {
     @Environment(\.managedObjectContext) var viewContext
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Workout.date, ascending: false)],
@@ -70,11 +70,15 @@ struct WorkoutsView: View {
         NavigationStack {
             List {
                 ForEach(workouts, id: \.self) { workout in
-                    VStack(alignment: .leading) {
-                        Text("Workout: \(workout.date!, formatter: itemFormatter)")
-                            .font(.headline)
+                    NavigationLink(destination: WorkoutDetailView(workout: workout)) {
+                        VStack(alignment: .leading) {
+                            Text("Workout: \(workout.date!, formatter: itemFormatter)")
+                                .font(.headline)
+                        }
                     }
+                    
                 }
+                .onDelete(perform: deleteWorkouts)
             }
             .navigationTitle("Workouts")
             .toolbar {
@@ -100,6 +104,19 @@ struct WorkoutsView: View {
             print("Error saving workout: \(error)")
         }
     }
+    
+    private func deleteWorkouts(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { workouts[$0] }.forEach(viewContext.delete)
+            
+            do {
+                try viewContext.save()
+            } catch {
+                // Handle the Core Data error
+                print("Error deleting workout: \(error)")
+            }
+        }
+    }
 }
 
 
@@ -109,6 +126,61 @@ private let itemFormatter: DateFormatter = {
     formatter.timeStyle = .short
     return formatter
 }()
+
+//
+//  WorkoutDetailView.swift
+//  stevesweights
+//
+//  Created by Stephen Dawes on 17/02/2024.
+//
+
+import SwiftUI
+import CoreData
+
+struct WorkoutDetailView: View {
+    let workout: Workout
+    @Environment(\.managedObjectContext) private var viewContext // Inject managedObjectContext
+    @Environment(\.dismiss) private var dismiss // For dismissing the view
+
+    var body: some View {
+        VStack {
+            Text("Workout Details")
+                .font(.title)
+            
+            Text("Workout Date: \(workout.date!, formatter: itemFormatter)")
+                .padding()
+            
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Workout Detail")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Delete") {
+                    deleteWorkout() // Correct the function name here
+                }
+            }
+        }
+    }
+    
+    private func deleteWorkout() {
+        viewContext.delete(workout)
+        do {
+            try viewContext.save()
+            dismiss() // Correctly dismiss the view
+        } catch {
+            print("Error deleting workout: \(error.localizedDescription)")
+        }
+    }
+}
+
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.timeStyle = .short
+    return formatter
+}()
+
 
 //
 //  ExerciseListView.swift
@@ -127,7 +199,7 @@ struct ExerciseListView: View {
         animation: .default)
     private var exercises: FetchedResults<Exercise>
     @State private var isAddingExercise = false
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -136,6 +208,7 @@ struct ExerciseListView: View {
                         Text(exercise.name ?? "Unnamed Exercise")
                     }
                 }
+                .onDelete(perform: deleteExercises)
             }
             .navigationTitle("Exercises")
             .toolbar {
@@ -145,12 +218,24 @@ struct ExerciseListView: View {
                     }
                 }
             }
-            .navigationDestination(isPresented: $isAddingExercise) {
+            .sheet(isPresented: $isAddingExercise) {
                 AddExerciseView()
             }
         }
     }
+
+    private func deleteExercises(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { exercises[$0] }.forEach(viewContext.delete)
+            do {
+                try viewContext.save()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
+
 
 
 
@@ -209,15 +294,15 @@ struct AddExerciseView: View {
 //  Created by Stephen Dawes on 16/02/2024.
 //
 
-import Foundation
 import SwiftUI
+import CoreData
 
 struct ExerciseDetailView: View {
     @ObservedObject var exercise: Exercise
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @State private var exerciseName: String = ""
-    
+
     var body: some View {
         VStack {
             TextField("Exercise Name", text: $exerciseName)
@@ -236,20 +321,35 @@ struct ExerciseDetailView: View {
                     saveExercise()
                 }
             }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Delete") {
+                    deleteExercise()
+                }
+            }
         }
     }
-    
+
     private func saveExercise() {
         exercise.name = exerciseName
         do {
             try viewContext.save()
-            dismiss() // Dismiss the view programmatically after saving
+            dismiss()
         } catch {
-            // Handle the save error appropriately
             print("Error saving exercise: \(error.localizedDescription)")
         }
     }
+
+    private func deleteExercise() {
+        viewContext.delete(exercise)
+        do {
+            try viewContext.save()
+            dismiss()
+        } catch {
+            print("Error deleting exercise: \(error.localizedDescription)")
+        }
+    }
 }
+
 
 //
 //  Persistence.swift

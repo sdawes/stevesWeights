@@ -19,10 +19,13 @@ struct WorkoutsListView: View {
         NavigationStack {
             List {
                 ForEach(workouts, id: \.self) { workout in
-                    VStack(alignment: .leading) {
-                        Text("Workout: \(workout.date!, formatter: itemFormatter)")
-                            .font(.headline)
+                    NavigationLink(destination: WorkoutDetailView(workout: workout)) {
+                        VStack(alignment: .leading) {
+                            Text("Workout: \(workout.date!, formatter: itemFormatter)")
+                                .font(.headline)
+                        }
                     }
+                    
                 }
                 .onDelete(perform: deleteWorkouts)
             }

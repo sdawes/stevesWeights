@@ -24,7 +24,7 @@ struct ExerciseListView: View {
                         Text(exercise.name ?? "Unnamed Exercise")
                     }
                 }
-                .onDelete(perform: deleteExercises) // Enables swipe to delete
+                .onDelete(perform: deleteExercises)
             }
             .navigationTitle("Exercises")
             .toolbar {
@@ -40,14 +40,12 @@ struct ExerciseListView: View {
         }
     }
 
-    // This function must be defined within the view struct but outside the body closure
     private func deleteExercises(offsets: IndexSet) {
         withAnimation {
             offsets.map { exercises[$0] }.forEach(viewContext.delete)
             do {
                 try viewContext.save()
             } catch {
-                // Handle the Core Data error
                 print(error.localizedDescription)
             }
         }
